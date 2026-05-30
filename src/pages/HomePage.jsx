@@ -208,7 +208,7 @@ const HomePage = () => {
                 <div className="aspect-square bg-slate-50 relative p-4">
                   {product.picture ? (
                     <img
-                      src={`https://inventory-service-vh7h.onrender.com/${product.picture}`}
+                      src={`https://inventory-service-vh7h.onrender.com/uploads/${product.picture}`}
                       alt={product.name}
                       className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                     />
