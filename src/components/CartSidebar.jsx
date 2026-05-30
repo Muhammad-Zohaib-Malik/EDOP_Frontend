@@ -195,7 +195,7 @@ const CartSidebar = () => {
                         <div className="w-20 h-20 bg-slate-50 rounded-lg overflow-hidden flex-shrink-0 p-2">
                           {item.picture ? (
                             <img
-                              src={`http://localhost:5002/uploads/${item.picture}`}
+                              src={`https://inventory-service-vh7h.onrender.com/uploads/${item.picture}`}
                               alt={item.name}
                               className="w-full h-full object-contain"
                             />
