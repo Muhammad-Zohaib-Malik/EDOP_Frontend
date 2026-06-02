@@ -299,7 +299,7 @@ const AdminDashboard = () => {
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">
                             {product.picture ? (
-                              <img src={`https://inventory-service-vh7h.onrender.com/uploads/${product.picture}`} alt=""
+                              <img src={product.picture.startsWith('http') ? product.picture : `https://inventory-service-vh7h.onrender.com/uploads/${product.picture}`} alt=""
                                 className="w-full h-full object-cover" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-xs text-slate-400 font-medium">N/A</div>
@@ -392,7 +392,7 @@ const AdminDashboard = () => {
                               <div key={idx} className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-slate-100 rounded-md overflow-hidden flex-shrink-0 border border-slate-200">
                                   {item.product_picture ? (
-                                    <img src={`https://inventory-service-vh7h.onrender.com/uploads/${item.product_picture}`}
+                                    <img src={item.product_picture.startsWith('http') ? item.product_picture : `https://inventory-service-vh7h.onrender.com/uploads/${item.product_picture}`}
                                       alt={item.product_name} className="w-full h-full object-cover" />
                                   ) : (
                                     <div className="w-full h-full flex items-center justify-center text-[10px] text-slate-400 font-medium">N/A</div>
