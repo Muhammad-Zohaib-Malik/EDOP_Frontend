@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { checkoutOrder } from "../api/orders";
+import { createCheckoutSession } from "../api/payment";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
@@ -73,7 +74,7 @@ const CartSidebar = () => {
         quantity: item.quantity,
       }));
 
-      await checkoutOrder({
+      const { data: orderData } = await checkoutOrder({
         customerName: formData.customerName,
         customerEmail: formData.customerEmail,
         customerPhone: formData.customerPhone,
@@ -81,10 +82,19 @@ const CartSidebar = () => {
         items,
       });
 
+      const { data: sessionData } = await createCheckoutSession({
+        orderId: orderData.orderId,
+        totalAmount: orderData.total,
+        customerEmail: formData.customerEmail,
+        items,
+      });
+
       clearCart();
-      toast.success("Order placed successfully!");
       setIsCartOpen(false);
       setIsCheckoutMode(false);
+      
+      // Redirect to Stripe Checkout
+      window.location.href = sessionData.url;
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Checkout failed");

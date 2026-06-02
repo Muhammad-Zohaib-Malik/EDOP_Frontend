@@ -8,6 +8,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import HomePage from "./pages/HomePage";
 import Navbar from "./components/Navbar";
 import CartSidebar from "./components/CartSidebar";
+import SuccessPage from "./pages/SuccessPage";
+import CancelPage from "./pages/CancelPage";
 
 import "./App.css";
 
@@ -33,6 +35,14 @@ const router = createBrowserRouter([
         <AdminDashboard />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: "/success",
+    element: <SuccessPage />,
+  },
+  {
+    path: "/cancel",
+    element: <CancelPage />,
   },
 ]);
 
