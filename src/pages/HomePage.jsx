@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { getProducts, searchProducts } from "../api/products";
 import { useCart } from "../context/CartContext";
 import { motion } from "framer-motion";
+import ServerWakeupModal from "../components/ServerWakeupModal";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -108,8 +109,11 @@ const HomePage = () => {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-            className="relative h-full flex items-center justify-center"
+            className="relative h-full flex flex-col items-center justify-center pt-8"
           >
+            <div className="z-30 mb-4 flex w-full justify-center">
+              <ServerWakeupModal />
+            </div>
             <div className="absolute w-[400px] h-[400px] bg-[#e0f2fe] rounded-full mix-blend-multiply filter blur-2xl opacity-70 right-0 top-1/2 -translate-y-1/2" />
             <div className="absolute w-[300px] h-[300px] bg-[#dbeafe] rounded-full top-10 left-10" />
             <img
