@@ -79,29 +79,30 @@ const AdminDashboard = () => {
   useEffect(() => { fetchProducts(); }, []);
   useEffect(() => { if (activeTab === "orders") fetchAdminOrders(); }, [activeTab]);
 
-  // ── Order search via Elasticsearch (debounced) ─────────────────────────────
-  useEffect(() => {
-    if (activeTab !== "orders") return;
-
+  const handleOrderSearchSubmit = async (e) => {
+    e.preventDefault();
     if (!orderSearch.trim()) {
       fetchAdminOrders();
       return;
     }
-
     setOrderSearching(true);
-    const timer = setTimeout(async () => {
-      try {
-        const res = await searchOrders(orderSearch.trim());
-        setOrders(res.data.orders);
-      } catch (e) {
-        console.error("Order search error:", e);
-      } finally {
-        setOrderSearching(false);
-      }
-    }, 400);
+    try {
+      const res = await searchOrders(orderSearch.trim());
+      setOrders(res.data.orders);
+    } catch (e) {
+      console.error("Order search error:", e);
+    } finally {
+      setOrderSearching(false);
+    }
+  };
 
-    return () => clearTimeout(timer);
-  }, [orderSearch, activeTab]);
+  const handleOrderSearchChange = (e) => {
+    const val = e.target.value;
+    setOrderSearch(val);
+    if (!val.trim() && activeTab === "orders") {
+      fetchAdminOrders();
+    }
+  };
 
   // ── Filtered products (local, instant) ────────────────────────────────────
   const filteredProducts = productSearch.trim()
@@ -342,19 +343,20 @@ const AdminDashboard = () => {
           <div className="p-6 border-b border-slate-100 flex items-center justify-between gap-4">
             <h2 className="font-display text-xl font-semibold text-slate-900 shrink-0">Customer Orders</h2>
             {/* Elasticsearch fuzzy search */}
-            <div className="relative max-w-xs w-full">
+            <form onSubmit={handleOrderSearchSubmit} className="relative max-w-xs w-full">
               <span className="absolute inset-y-0 left-3 flex items-center text-slate-400"><SearchIcon /></span>
               <input
                 type="text"
                 value={orderSearch}
-                onChange={(e) => setOrderSearch(e.target.value)}
+                onChange={handleOrderSearchChange}
                 placeholder="Search by name, email… (typos OK!)"
                 className="w-full pl-9 pr-9 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#3b82f6] transition-all"
               />
               {orderSearching && (
                 <span className="absolute inset-y-0 right-3 flex items-center"><Spinner /></span>
               )}
-            </div>
+              <button type="submit" className="hidden" />
+            </form>
           </div>
 
           {loadingOrders ? (

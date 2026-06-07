@@ -19,30 +19,20 @@ const HomePage = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  // Debounced search via Elasticsearch
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      // Reset to all products when query is cleared
-      setSearching(false);
-      return;
-    }
-
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
     setSearching(true);
-    const timer = setTimeout(async () => {
-      try {
-        const res = await searchProducts(searchQuery.trim());
-        setProducts(res.data.products);
-      } catch (e) {
-        console.error("Search error:", e);
-      } finally {
-        setSearching(false);
-      }
-    }, 400);
+    try {
+      const res = await searchProducts(searchQuery.trim());
+      setProducts(res.data.products);
+    } catch (e) {
+      console.error("Search error:", e);
+    } finally {
+      setSearching(false);
+    }
+  };
 
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
-
-  // Reload all when search is cleared
   const handleSearchChange = (e) => {
     const val = e.target.value;
     setSearchQuery(val);
@@ -149,7 +139,7 @@ const HomePage = () => {
           <p className="text-slate-500 font-sans mb-6">Handpicked items for you</p>
 
           {/* ── Search Bar ── */}
-          <div className="relative max-w-md mx-auto">
+          <form onSubmit={handleSearchSubmit} className="relative max-w-md mx-auto">
             <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -176,7 +166,8 @@ const HomePage = () => {
                 </svg>
               </span>
             )}
-          </div>
+            <button type="submit" className="hidden" />
+          </form>
         </div>
 
         {loading ? (
